@@ -8,7 +8,7 @@ class DataLayerHelper {
 
   private processUpdates(updates: DataLayerEvent[], callback: (arg: DataLayerEvent) => void) {
     // This function could be re-entrant if the callback pushes something onto the datalayer, 
-    // which is why unprocessed is a member and we guard 
+    // which is why unprocessed is a member and we guard as a minor optimisation.
     this.unprocessed.push(...updates);
     while (!this.inCallback && this.unprocessed.length > 0) {
       const update = this.unprocessed.shift();

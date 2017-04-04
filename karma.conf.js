@@ -10,7 +10,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'jasmine-ajax', 'jasmine'],
+    frameworks: ['browserify', 'jasmine'],
 
     browserify: {
       debug: true,
@@ -22,13 +22,6 @@ module.exports = function(config) {
       "src/*.ts",
       "tests/*.ts"
     ],
-
-
-    // list of files to exclude
-    exclude: [
-      "src/index.ts"
-    ],
-
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
