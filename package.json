@@ -1,0 +1,14 @@
+{
+  "name": "typed-data-layer-helper",
+  "version": "1.0.0",
+  "description": "A Data Layer Helper for Typescript",
+  "main": ".",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "karma test"
+  },
+  "author": "dave@hillier.co",
+  "license": "ISC"
+}

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "built",
+    "allowJs": false,
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "baseUrl": "."
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "src/index.ts"
+  ]
+}
