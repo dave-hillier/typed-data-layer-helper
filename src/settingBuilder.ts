@@ -36,23 +36,27 @@ function clone<T>(a: T): T {
   return JSON.parse(JSON.stringify(a));
 }
 
-export function mergeRecursive<T, U>(to: T, from: U): T & U {
+function isValue(x: any): x is string | number | symbol {
+  return typeof x === 'string' || typeof x === 'number' || typeof x === 'symbol';
+}
+
+export function merge<T, U>(to: T, from: U): T & U {
   let target = <T & U>clone(to);
 
   for (let key in from) {
-    if (!hasOwn(from, key)) { // TODO: why would this be true?
-      continue;
-    }
-
     const fromVal = (<any>from)[key];
     const toVal = (<any>target)[key];
 
-    if (!hasOwn(target, key)) {
-      target[key] = clone(fromVal);
+    if (isValue(fromVal)) {
+      target[key] = <any>fromVal; // Values are replaced
+    } else if (Array.isArray(fromVal)) {
+      if (Array.isArray(toVal))
+        target[key] = <any>toVal.concat(fromVal); // Arrays are combined
+      else
+        target[key] = <any>fromVal;
     } else {
-      target[key] = mergeRecursive(toVal, fromVal);
+      target[key] = merge(toVal, fromVal);
     }
-    // TODO: do I need array support?
   }
   return target;
 }
