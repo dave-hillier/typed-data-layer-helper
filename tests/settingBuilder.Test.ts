@@ -20,26 +20,46 @@ describe('settingBuilder', function () {
       const result = settingBuilder.queryStringToObject('?a.b=value1');
       expect(result).toEqual({ a: { b: 'value1' } });
     });
+    
+    it('two nested parameter', function () {
+      const result = settingBuilder.queryStringToObject('?a.b=value1&a.c=value1');
+      expect(result).toEqual({ a: { b: 'value1', c: 'value1' } });
+    });    
   });
 
   describe('merge', function () {
 
-    it('merge single field', function () {
+    it('empty', function () {
+      const result = settingBuilder.merge({ a: 1 }, {});
+      expect(result).toEqual({ a: 1 });
+    });
+
+    it('into empty', function () {
+      const result = settingBuilder.merge({ }, { a: 2 });
+      expect(result).toEqual({ a: 2 });
+    });
+
+    it('nested into empty', function () {
+      const result = settingBuilder.merge({ }, { a: {b :2 } });
+      expect(result).toEqual({ a: {b :2 } });
+    });
+
+    it('single field', function () {
       const result = settingBuilder.merge({ a: 1 }, { a: 2 });
       expect(result).toEqual({ a: 2 });
     });
 
-    it('merge separate fields', function () {
+    it('separate fields', function () {
       const result = settingBuilder.merge({ a: 1 }, { b: 2 });
       expect(result).toEqual({ a: 1, b: 2 });
     });
 
-    it('merge nested objects', function () {
+    it('nested objects', function () {
       const result = settingBuilder.merge({ a: { c: 1 } }, { a: { b: 2 } });
       expect(result).toEqual({ a: { c: 1, b: 2 } });
     });
 
-    it('merge array field', function () {
+    it('array field', function () {
       const result = settingBuilder.merge({ a: [1] }, { a: [2] });
       expect(result).toEqual({ a: [1, 2] });
     });

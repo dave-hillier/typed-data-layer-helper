@@ -17,17 +17,14 @@ function hasOwn<T, K>(obj: T, key: K): boolean {
 
 export function queryStringToObject(search = location.search): any {
   const decoded = decodeURI(search.substring(1));
-  const asJson = decoded.
-    replace(/"/g, '\\"'). // Escape quotes
-    replace(/&/g, '","'). // Convert & to next object
-    replace(/=/g, '":"'); // Convert = to :
-  const obj = JSON.parse('{"' + asJson + '"}');
   let target = {};
-  for (let key in obj) {
-    if (key.indexOf('.') !== -1)
-      target = { ...target, ...expand(key, obj[key]) };
+  let pairs = decoded.split("?").pop().split("&");
+  for (let part of pairs) {
+    var kv = part.split("=");
+    if (kv[0].indexOf('.') !== -1)
+      target = merge(target, expand(kv[0], kv[1]));
     else
-      target[key] = obj[key];
+      target[kv[0]] = kv[1];
   }
   return target;
 }
@@ -50,12 +47,9 @@ export function merge<T, U>(to: T, from: U): T & U {
     if (isValue(fromVal)) {
       target[key] = <any>fromVal; // Values are replaced
     } else if (Array.isArray(fromVal)) {
-      if (Array.isArray(toVal))
-        target[key] = <any>toVal.concat(fromVal); // Arrays are combined
-      else
-        target[key] = <any>fromVal;
+      target[key] = Array.isArray(toVal) ? <any>toVal.concat(fromVal) : <any>fromVal; // Arrays are combined
     } else {
-      target[key] = merge(toVal, fromVal);
+      target[key] = toVal ? merge(toVal, fromVal) : fromVal;
     }
   }
   return target;
