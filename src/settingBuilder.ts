@@ -56,6 +56,7 @@ export function merge<T, U>(to: T, from: U): T & U {
 }
 
 export function getScriptUrl(scriptName) {
+  // TODO: use document.currentScript.src
   const scripts: any[] = Array.prototype.slice.call(document.getElementsByTagName("script")); // TODO: correct type?
   const matching = scripts.filter(s => s.src.indexOf('/' + scriptName));
   if (matching.length > 0) {
