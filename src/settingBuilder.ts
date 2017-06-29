@@ -16,15 +16,22 @@ function hasOwn<T, K>(obj: T, key: K): boolean {
 }
 
 export function queryStringToObject(search = location.search): any {
-  const decoded = decodeURI(search.substring(1));
-  let target = {};
-  let pairs = decoded.split("?").pop().split("&");
+  const decoded = decodeURI(url.substring(1));
+  let target: { [key: string]: any } = {};
+  const query = decoded.split('?').pop();
+  if (!query) {
+    return;
+  }
+  let pairs = query.split('&');
   for (let part of pairs) {
-    var kv = part.split("=");
-    if (kv[0].indexOf('.') !== -1)
-      target = merge(target, expand(kv[0], kv[1]));
-    else
-      target[kv[0]] = kv[1];
+    const [key, value] = part.split('=');
+    const v = /^-?\d*\.?\d*$/.test(value) ? +value : value;
+    if (key.indexOf('.') !== -1) {
+      target = merge(target, expand(key, v));
+    }
+    else {
+      target[key] = v;
+    }
   }
   return target;
 }
